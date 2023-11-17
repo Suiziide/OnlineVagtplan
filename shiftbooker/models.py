@@ -39,13 +39,24 @@ class Movie(models.Model):
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
-        return self.my_field_name
+        return self.title
 
 
 class Shift(models.Model):
     """Class representing a shift"""
 
-    shift_type = models.CharField(max_length=200)
+    SHIFT_TYPES = (
+        ("m", "Maintenance"),
+        ("s", "Shop"),
+        ("c", "Cleaning"),
+        ("o", "A/V Operations"),
+        ("p", "Event Planning"),
+    )
+
+    shift_type = models.CharField(
+        max_length=1,
+        choices=SHIFT_TYPES,
+    )
     date = models.DateTimeField()
     duration = models.IntegerField()
     movie = models.ForeignKey("Movie", on_delete=models.CASCADE)
@@ -64,4 +75,4 @@ class Shift(models.Model):
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
-        return self.my_field_name
+        return f"{self.shift_type}, {self.movie.title}, {self.date}"
