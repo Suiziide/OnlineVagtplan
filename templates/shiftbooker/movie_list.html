@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="card-container">
+  {% for movie in movie_list %}
+  <div class="card">
+    {% load static %}
+    <img class="card-img-top" src="{% static 'img/' %}{{movie.poster}}" alt="This shit aint workin'">
+    {{ BASE_DIR }}
+    <div class="card-header">
+      <h2>{{ movie.title }}</h2>
+    </div>
+    <div class="card-content">
+      <p><strong>Date:</strong> {{ movie.date }}</p>
+      <p><strong>Duration:</strong> {{ movie.duration }}</p>
+      
+      <a href="{{ movie.get_absolute_url }}">Details</a>
+    </div>
+  </div>
+  {% empty %}
+  <p>There are no movies</p>
+  {% endfor %}
+</div>
+
+
+
+
+
+
+
+<style>
+  /* Add your card styling here */
+  .card-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1vw;
+  }
+  
+  .card {
+    width: 28vw;
+    height: 36vw;
+    border: 1px solid #ccc;
+    border-radius: 1px;
+    overflow: hidden;
+    box-shadow: 0 4vw 8vw rgb(0, 0, 0);
+    background-color: #353535;
+  }
+  
+  .card-header {
+    background-color: #2b2b2b;
+    text-align: center;
+    overflow: hidden;
+    border: 1px solid #ccc;
+    border-radius: 1px;
+    overflow: hidden;
+    color: rgb(255, 255, 255);
+  }
+  
+  .card-content {
+    padding: 1vw;
+  }
+</style>
+{% endblock %}

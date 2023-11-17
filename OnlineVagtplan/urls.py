@@ -20,6 +20,12 @@ from django.urls import include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
+admin.site.site_header = 'OnlineVagtPlan Administration'
+admin.site.site_title = 'Keeper Of The Voulentears'
+admin.site.index_title = 'Admin Page'
+
+
 urlpatterns = [
     path("admin/", admin.site.urls),
 ]

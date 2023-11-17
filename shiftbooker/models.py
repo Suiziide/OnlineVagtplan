@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.conf import settings
 
 ## Users skal lige undersøges hvordan vi tilføjer fields til standard modellen!!
+## https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#auth-custom-user ?
 
 
 class Movie(models.Model):
@@ -13,7 +14,7 @@ class Movie(models.Model):
     date = models.DateTimeField()
     duration = models.IntegerField()
     poster = models.ImageField(
-        upload_to=None, height_field=None, width_field=None, max_length=None
+        upload_to="", height_field=None, width_field=None, max_length=None
     )  # Need to look into how this shit works
 
     ## INFO FOR IMAGEFIELD
@@ -35,7 +36,7 @@ class Movie(models.Model):
     # Methods
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of movie."""
-        return reverse("movie-detail-view", args=[str(self.id)])
+        return reverse("movie-detail", args=[str(self.id)])
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
@@ -71,7 +72,7 @@ class Shift(models.Model):
     # Methods
     def get_absolute_url(self):
         """Returns the URL to access a particular instance of MyModelName."""
-        return reverse("shift-detail-view", args=[str(self.id)])
+        return reverse("shift-detail", args=[str(self.id)])
 
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
