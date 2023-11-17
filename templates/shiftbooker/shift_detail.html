@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block content %}
+<div class="card text-center">
+    <div class="card-header">
+        {{ shift.movie.title }}
+    </div>
+    <div class="card-body">
+        {% load static %}
+        {%if shift.movie.poster %}
+        <img class="card-img-top w-25" style="padding:10px;" src="{% static 'img/' %}{{ shift.movie.poster }}">
+        {% endif %}
+        <h5 class="card-title">Volunteer shift type: {{ shift.get_shift_type_display }}</h5>
+        <p class="card-text">{{ shift.date }}, duration: {{ shift.duration }} minutes</p>
+        {% if not shift.user %}
+        <form action="{% url 'sign_up_for_shift' shift.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" value="Sign up for shift!" class="btn btn-success">
+        </form>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
