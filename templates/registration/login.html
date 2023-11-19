@@ -6,16 +6,7 @@
     <p>Your username and password didn't match. Please try again.</p>
   {% endif %}
 
-  {% if next %}
-    {% if user.is_authenticated %}
-      <p>Your account doesn't have access to this page. To proceed,
-      please login with an account that has access.</p>
-    {% else %}
-      <p>Please login to see this page.</p>
-    {% endif %}
-  {% endif %}
-
-  <form method="post" action="{% url 'login' %}">
+  {% comment %} <form method="post" action="{% url 'login' %}">
     {% csrf_token %}
     <table>
       <tr>
@@ -29,9 +20,46 @@
     </table>
     <input type="submit" value="login">
     <input type="hidden" name="next" value="{{ next }}">
-  </form>
+  </form> {% endcomment %}
 
   {# Assumes you setup the password_reset view in your URLconf #}
-  <p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+  {% comment %} <p><a href="{% url 'password_reset' %}">Lost password?</a></p> {% endcomment %}
+<section class="vh-100 gradient-custom">
+  <div class="container py-5 h-100">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+      <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+        <div class="card bg-dark text-white" style="border-radius: 1rem;">
+          <div class="card-body p-5 text-center">
 
+            <div class="md-5 mt-md-4 pb-5">
+
+              <h2 class="fw-bold mb-2 ">OnlineVagtplan</h2>
+              <p class="text-white-50 mb-5">Please enter your login and password!</p>
+              <form method="post" action="{% url 'login' %}">
+                  {% csrf_token %}
+                  <table>
+                    <tr>
+                      <div class="form-outline form-white mb-4">
+                      <td class="form-label">{{ form.username.label_tag }}</td>
+                      <td class="form-control-lg">{{ form.username }}</td>
+                      </div
+                    </tr>
+                    <tr>
+                      <div class="form-outline form-white mb-4">
+                      <td class="form-label">{{ form.password.label_tag }}</td>
+                      <td class="form-control-lg">{{ form.password }}</td>
+                      </div
+                    </tr>
+                  </table>
+                  <p class="small mb-5 pb-lg-2"><a class="text-white-50" href="{% url 'password_reset' %}">Forgot password?</a></p>
+                  <input class="btn btn-outline-light btn-lg px-5" type="submit" value="login">
+                  <input type="hidden" name="next" value="{{ next }}">
+                </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
 {% endblock %}
