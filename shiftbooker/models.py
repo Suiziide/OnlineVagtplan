@@ -1,10 +1,26 @@
 from django.db import models
 from django.urls import reverse
-from django.contrib.auth.models import User
+from django.conf import settings
+from django.contrib.auth.models import AbstractUser, BaseUserManager
+
 
 ## Users skal lige undersøges hvordan vi tilføjer fields til standard modellen!!
 ## https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#auth-custom-user ?
 
+class CustomUserManager(BaseUserManager):
+    def get_by_natural_key(self, username):
+        return self.get(username__iexact=username)
+    
+class User(AbstractUser):
+    registered = models.DateField(
+        ("Registration Date"), auto_now=False, auto_now_add=True
+    )
+    phone = models.CharField(max_length=100)
+    shifts_taken = models.IntegerField("Number of shifts taken", default=0)
+    objects = CustomUserManager()
+    class Meta(AbstractUser.Meta):
+       swappable = 'AUTH_USER_MODEL'
+       permissions = (("can_view_users_shifts", "Can view users and shifts"),)
 
 class Movie(models.Model):
     """Class representing a movie"""
@@ -49,9 +65,10 @@ class Shift(models.Model):
     date = models.DateTimeField()
     duration = models.IntegerField()
     movie = models.ForeignKey("Movie", on_delete=models.CASCADE)
-    user = models.ForeignKey(
-        "Volunteer", on_delete=models.SET_NULL, null=True, blank=True
-    )
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
+    #user = models.ForeignKey(
+    #    "Volunteer", on_delete=models.SET_NULL, null=True, blank=True
+    #)
 
     # Metadata
     class Meta:
@@ -67,14 +84,14 @@ class Shift(models.Model):
         return f"{self.movie.title}, {self.date}"
 
 
-class Volunteer(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    registered = models.DateField(
-        ("Registration Date"), auto_now=False, auto_now_add=True
-    )
-    phone = models.CharField(max_length=100)
-    shifts_taken = models.IntegerField("Number of shifts taken", default=0)
+# class Volunteer(models.Model):
+#     user = models.OneToOneField(User, on_delete=models.CASCADE)
+#     registered = models.DateField(
+#         ("Registration Date"), auto_now=False, auto_now_add=True
+#     )
+#     phone = models.CharField(max_length=100)
+#     shifts_taken = models.IntegerField("Number of shifts taken", default=0)
 
-    def __str__(self):
-        """String for representing the MyModelName object (in Admin site etc.)."""
-        return self.user.username
+#     def __str__(self):
+#         """String for representing the MyModelName object (in Admin site etc.)."""
+#         return self.user.username

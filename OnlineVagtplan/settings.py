@@ -28,6 +28,9 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+AUTH_USER_MODEL = "shiftbooker.User"
+swappable = 'AUTH_USER_MODEL'
+
 
 # Application definition
 
@@ -39,6 +42,7 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
     "shiftbooker.apps.ShiftbookerConfig",
+    "django_extensions",
 ]
 
 MIDDLEWARE = [
@@ -124,3 +128,5 @@ MEDIA_ROOT = "shiftbooker/static/img"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+LOGIN_REDIRECT_URL = '/'

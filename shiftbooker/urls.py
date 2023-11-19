@@ -1,6 +1,5 @@
-from django.urls import path
+from django.urls import path, include
 from . import views
-from django.contrib import admin
 
 urlpatterns = [
     path("", views.index, name="index"),
@@ -13,4 +12,5 @@ urlpatterns = [
         views.sign_up_for_shift,
         name="sign_up_for_shift",
     ),
+    path('accounts/', include('django.contrib.auth.urls')),
 ]
