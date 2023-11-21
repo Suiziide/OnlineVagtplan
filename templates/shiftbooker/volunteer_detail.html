@@ -1,14 +1,14 @@
 {% extends "base.html" %}
 {% block content %}
-{% if user.name %}
-<h1> {{ user.name }}</h1>
+{% if volunteer.name %}
+<h1> {{ volunteer.name }}</h1>
 {% else %}
-<h1> {{ user.username }}</h1>
+<h1> {{ volunteer.username }}</h1>
 {% endif %}
 
 <div class="row" style="padding-top:20px;">
     {% for shift in shift_list %}
-    <!-- {% if shfit.user == user %} -->
+    {% if volunteer == shift.user %}
     <div class="col-3 mb-4">
       <div class="card" style="height:100%">
         <div class="card-body d-flex flex-column">
@@ -23,7 +23,7 @@
         </div>
       </div>
     </div>
-    <!-- {% endif %} -->
+    {% endif %}
     {% endfor %}
   </div>
   </div>

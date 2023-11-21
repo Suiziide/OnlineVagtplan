@@ -93,6 +93,7 @@ class VolunteerListView(PermissionRequiredMixin, LoginRequiredMixin, generic.Lis
 class VolunteerDetailView(LoginRequiredMixin, generic.DetailView):
     template_name = "shiftbooker/volunteer_detail.html"
     model = get_user_model()
+    context_object_name = "volunteer"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

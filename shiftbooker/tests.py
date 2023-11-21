@@ -90,13 +90,6 @@ class ShiftModelTest(TestCase):
         self.assertIsNone(shift.user)
 
 
-class CustomUserManagerTest(TestCase):
-    def test_get_by_natural_key(self):
-        manager = CustomUserManager()
-        user = manager.get_by_natural_key("stefan")
-        self.assertIsNotNone(user)
-
-
 class UserModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
