@@ -1,16 +1,21 @@
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
-from django.contrib.auth.models import AbstractUser, BaseUserManager
+from django.contrib.auth.models import AbstractUser, UserManager
 
 
-## Users skal lige undersøges hvordan vi tilføjer fields til standard modellen!!
+## Users skal lige undersøges hvordan vi tilføjer fields til standard modellen!! Det har vi gjort.
 ## https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#auth-custom-user ?
 
-class CustomUserManager(BaseUserManager):
+
+class CustomUserManager(UserManager):
     def get_by_natural_key(self, username):
         return self.get(username__iexact=username)
-    
+
+    # def create_user()???
+    # def create_superuser()???
+
+
 class User(AbstractUser):
     registered = models.DateField(
         ("Registration Date"), auto_now=False, auto_now_add=True
@@ -18,9 +23,15 @@ class User(AbstractUser):
     phone = models.CharField(max_length=100)
     shifts_taken = models.IntegerField("Number of shifts taken", default=0)
     objects = CustomUserManager()
+
     class Meta(AbstractUser.Meta):
-       swappable = 'AUTH_USER_MODEL'
-       permissions = (("can_view_users_shifts", "Can view users and shifts"),)
+        swappable = "AUTH_USER_MODEL"
+        permissions = (("can_view_users_shifts", "Can view users and shifts"),)
+
+    def get_absolute_url(self):
+        """Returns the URL to access a particular instance of movie."""
+        return reverse("volunteer-detail", args=[str(self.id)])
+
 
 class Movie(models.Model):
     """Class representing a movie"""
@@ -65,10 +76,12 @@ class Shift(models.Model):
     date = models.DateTimeField()
     duration = models.IntegerField()
     movie = models.ForeignKey("Movie", on_delete=models.CASCADE)
-    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True)
-    #user = models.ForeignKey(
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
+    )
+    # user = models.ForeignKey(
     #    "Volunteer", on_delete=models.SET_NULL, null=True, blank=True
-    #)
+    # )
 
     # Metadata
     class Meta:

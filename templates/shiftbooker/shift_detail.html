@@ -12,9 +12,32 @@
         <h5 class="card-title">Volunteer shift type: {{ shift.get_shift_type_display }}</h5>
         <p class="card-text">{{ shift.date }}, duration: {{ shift.duration }} minutes</p>
         {% if not shift.user %}
-        <form action="{% url 'sign_up_for_shift' shift.id %}" method="post">
+        {% if perms.shiftbooker.can_view_users_shifts %}
+            <form action="{% url 'sign_up_for_shift' shift.id %}" method="post">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="user_select">Select a user:</label>
+                    <select class="form-control" id="user_select" name="selected_user">
+                        {% for user in user_list %}
+                            <option value="{{ user.id }}">{{ user.username }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <input type="submit" value="Assign User" class="btn btn-success">
+            </form>
+
+        {% else %}
+        <form action="{% url 'sign_up_for_shift' shift.id%}" method="post">
             {% csrf_token %}
+            <input type="hidden" name="selected_user" value="{{ user.id }}">
+            <input type="hidden" name="shift_id" value="{{ shift.id }}">
             <input type="submit" value="Sign up for shift!" class="btn btn-success">
+        </form>
+        {% endif %}
+        {% elif perms.shiftbooker.can_view_users_shifts %}
+        <form action="{% url 'remove_user_from_shift' shift.id %}" method="post">
+           {% csrf_token %}
+           <input type="submit" value="Remove user from shift!" class="btn btn-success">
         </form>
         {% endif %}
     </div>

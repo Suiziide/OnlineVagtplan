@@ -10,8 +10,7 @@
 <div style="margin-left:20px;margin-top:20px;padding-right: 20px;">
   <h4>Available shifts: </h4>
   <div class="list-group">
-    {% for shift in movie.shift_set.all %}
-    {% if shift.user == None %}
+  {% if avail_shifts %}
     <ul class="list-group">
       <div class="container text-center">
         <div class="row">
@@ -27,13 +26,16 @@
         </div>
       </div>
     </ul>
+    {% endif%}
+    {% for shift in avail_shifts %}
+    {% if not shift.user %}
     <a href="{{ shift.get_absolute_url }}" class="list-group-item list-group-item-action list-group-item-success">
       <div class="container text-center">
         <div class="row">
           <div class="col">
             {{ shift.get_shift_type_display}}
           </div>
-          <div class="col">
+          <div class="col"> 
             {{ shift.date}}
           </div>
           <div class="col">
@@ -47,12 +49,11 @@
     <p>There are no shifts to show</p>
     {% endfor %}
   </div>
+  {% if perms.shiftbooker.can_view_users_shifts %}
   <br>
-  
   <h4>Full shifts: </h4>
+  {% if avail_shifts|length != movie.shift_set.all|length %}
   <div class="list-group">
-    {% for shift in movie.shift_set.all %}
-    {% if movie.shift_set.all %}
     <ul class="list-group">
       <div class="container text-center">
         <div class="row">
@@ -71,6 +72,12 @@
         </div>
       </div>
     </ul>
+    {% else %}
+      <p>There are no shifts to show</p>
+    {% endif %}
+    
+    {% for shift in movie.shift_set.all %}
+    {% if shift.user %}
     <a href="{{ shift.get_absolute_url }}" class="list-group-item list-group-item-action list-group-item-danger">
       <div class="container text-center">
         <div class="row">
@@ -90,9 +97,8 @@
       </div>
     </a>
     {% endif %}
-    {% empty %}
-    <p>There are no shifts to show</p>
     {% endfor %}
+    {% endif %}
   </div>
 </div>
 {% endblock %}
