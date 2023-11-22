@@ -1,6 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from .models import Shift, Movie
-from .forms import CreateUserForm, CreateShowForm
+from .forms import CreateUserForm, CreateShowForm, CreateShiftForm
 from django.shortcuts import render
 from django.views import generic
 from django.contrib import messages
@@ -9,6 +9,7 @@ from django.contrib.auth.decorators import permission_required
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.mixins import PermissionRequiredMixin
 from django.contrib.auth import get_user_model
+from django.contrib.auth.models import Group
 
 
 # Create your views here.
@@ -72,9 +73,16 @@ def create_user(request):
             data = form.cleaned_data
             get_user_model().objects.create_user(
                 username=data["username"],
-                phone=data["phone"],
                 password=data["password"],
+                first_name=data["first_name"],
+                last_name=data["last_name"],
+                email=data["email"],
+                phone=data["phone"],
+                shifts_taken=data["shifts_taken"],
             )
+            new_user = get_user_model().objects.get(username=data["username"])
+            group = Group.objects.get(name=data["groups"][0])
+            group.user_set.add(new_user)
 
             return redirect("volunteers")
 
@@ -92,17 +100,10 @@ def create_user(request):
 @permission_required("shiftbooker.can_view_users_shifts")
 def create_show(request):
     if request.method == "POST":
-        form = CreateShowForm(request.POST)
+        form = CreateShowForm(request.POST, request.FILES)
 
         if form.is_valid():
-            data = form.cleaned_data
-            Movie.objects.create(
-                title=data["title"],
-                date=data["date"],
-                duration=data["duration"],
-                poster=data["poster"],
-            )
-
+            form.save()
             return redirect("movies")
 
     else:
@@ -113,6 +114,26 @@ def create_show(request):
     }
 
     return render(request, "shiftbooker/create_show.html", context)
+
+
+@login_required
+@permission_required("shiftbooker.can_view_users_shifts")
+def create_shift(request):
+    if request.method == "POST":
+        form = CreateShiftForm(request.POST)
+
+        if form.is_valid():
+            form.save()
+            return redirect("movies")
+
+    else:
+        form = CreateShiftForm()
+
+    context = {
+        "form": form,
+    }
+
+    return render(request, "shiftbooker/create_shift.html", context)
 
 
 class MovieListView(LoginRequiredMixin, generic.ListView):

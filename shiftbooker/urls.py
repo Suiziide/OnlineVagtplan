@@ -25,4 +25,5 @@ urlpatterns = [
     path("accounts/", include("django.contrib.auth.urls")),
     path("create_user/", views.create_user, name="create-user"),
     path("create_show/", views.create_show, name="create-show"),
+    path("create_shift/", views.create_shift, name="create-shift"),
 ]

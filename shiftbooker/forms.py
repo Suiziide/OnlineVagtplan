@@ -1,22 +1,13 @@
 from django.forms import (
     ModelForm,
     ValidationError,
-    DateInput,
+    DateTimeInput,
     PasswordInput,
-    EmailField,
 )
 from django.utils.translation import gettext_lazy as _
 from django.utils import timezone
-from shiftbooker.models import Movie
+from shiftbooker.models import Movie, Shift
 from django.contrib.auth import get_user_model
-
-
-class DateInput(DateInput):
-    input_type = "date"
-
-
-# class EmailInput(EmailField):
-#    input_type = "email"
 
 
 class CreateUserForm(ModelForm):
@@ -70,4 +61,32 @@ class CreateShowForm(ModelForm):
             "duration": _("Duration of Show"),
             "poster": _("Image for Movie-Poster (optional)"),
         }
-        widgets = {"date": DateInput()}
+        widgets = {
+            "date": DateTimeInput(
+                format=("%Y-%m-%dT%H:%M"), attrs={"type": "datetime-local"}
+            )
+        }
+
+
+class CreateShiftForm(ModelForm):
+    def clean(self):
+        data = super().clean()
+
+        # Check if a date is not in the past.
+        if data["date"] < timezone.now():
+            raise ValidationError(("Invalid Input - date must not be in the past"))
+
+        # Check if duration is positive
+        if data["duration"] < 0:
+            raise ValidationError(("Invalid Input - duration must non-negative"))
+
+        return data
+
+    class Meta:
+        model = Shift
+        fields = "__all__"
+        widgets = {
+            "date": DateTimeInput(
+                format=("%Y-%m-%dT%H:%M"), attrs={"type": "datetime-local"}
+            )
+        }

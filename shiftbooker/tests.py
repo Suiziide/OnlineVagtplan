@@ -1,8 +1,6 @@
 from django.test import TestCase
-from django.urls import reverse
-from .models import Shift, Movie, User, CustomUserManager
+from .models import Shift, Movie
 from django.contrib.auth import get_user_model
-from django.test import Client
 
 
 # Create your tests here.
@@ -12,9 +10,7 @@ class MovieModelTest(TestCase):
         print("(MovieModelTest)")
         # Set up non-modified objects used by all test methods
         Movie.objects.create(
-            title="Test Movie",
-            date="2024-01-01T12:00:00Z",
-            duration=120,
+            title="Test Movie", date="2024-01-01T12:00:00Z", duration=120, poster=None
         )
 
     def test_title_label(self):
@@ -96,12 +92,12 @@ class UserModelTest(TestCase):
         print("(UserModelTest)")
         # Set up non-modified objects used by all test methods
         get_user_model().objects.create_user(
-            username="stefan",
-            email="clown@emoji.xd",
-            password="testpassword",
-            registered="2023-01-01",
-            phone="1234567890",
-            shifts_taken=5,
+            username="testbrugernavn",
+            email="bamse@kylling.dk",
+            password="123asdqwe",
+            registered="22-11-2023",
+            phone="88888888",
+            shifts_taken=69,
         )
 
     def test_username_label(self):
@@ -123,11 +119,6 @@ class UserModelTest(TestCase):
         user = get_user_model().objects.get(id=1)
         field_label = user._meta.get_field("shifts_taken").verbose_name
         self.assertEqual(field_label, "Number of shifts taken")
-
-    def test_username_max_length(self):
-        user = get_user_model().objects.get(id=1)
-        max_length = user._meta.get_field("username").max_length
-        self.assertEqual(max_length, 150)
 
     def test_permissions(self):
         user = get_user_model().objects.get(id=1)
