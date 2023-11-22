@@ -23,4 +23,6 @@ urlpatterns = [
         name="remove_user_from_shift",
     ),
     path("accounts/", include("django.contrib.auth.urls")),
+    path("create_user/", views.create_user, name="create-user"),
+    path("create_show/", views.create_show, name="create-show"),
 ]

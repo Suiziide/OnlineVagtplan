@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404, redirect
 from .models import Shift, Movie
+from .forms import CreateUserForm, CreateShowForm
 from django.shortcuts import render
 from django.views import generic
 from django.contrib import messages
@@ -59,6 +60,59 @@ def remove_user_from_shift(request, shift_id):
 
     # Redirect to a success page or back to the same page
     return redirect(shift.movie.get_absolute_url())
+
+
+@login_required
+@permission_required("shiftbooker.can_view_users_shifts")
+def create_user(request):
+    if request.method == "POST":
+        form = CreateUserForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+            get_user_model().objects.create_user(
+                username=data["username"],
+                phone=data["phone"],
+                password=data["password"],
+            )
+
+            return redirect("volunteers")
+
+    else:
+        form = CreateUserForm()
+
+    context = {
+        "form": form,
+    }
+
+    return render(request, "shiftbooker/create_user.html", context)
+
+
+@login_required
+@permission_required("shiftbooker.can_view_users_shifts")
+def create_show(request):
+    if request.method == "POST":
+        form = CreateShowForm(request.POST)
+
+        if form.is_valid():
+            data = form.cleaned_data
+            Movie.objects.create(
+                title=data["title"],
+                date=data["date"],
+                duration=data["duration"],
+                poster=data["poster"],
+            )
+
+            return redirect("movies")
+
+    else:
+        form = CreateShowForm()
+
+    context = {
+        "form": form,
+    }
+
+    return render(request, "shiftbooker/create_show.html", context)
 
 
 class MovieListView(LoginRequiredMixin, generic.ListView):

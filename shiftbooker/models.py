@@ -12,11 +12,10 @@ class CustomUserManager(UserManager):
     def get_by_natural_key(self, username):
         return self.get(username__iexact=username)
 
-    # def create_user()???
-    # def create_superuser()???
-
 
 class User(AbstractUser):
+    """Class representing a user"""
+
     registered = models.DateField(
         ("Registration Date"), auto_now=False, auto_now_add=True
     )
@@ -37,7 +36,6 @@ class Movie(models.Model):
     """Class representing a movie"""
 
     title = models.CharField(max_length=200)
-
     date = models.DateTimeField()
     duration = models.IntegerField()
     poster = models.ImageField(

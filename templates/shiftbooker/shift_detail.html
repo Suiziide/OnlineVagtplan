@@ -15,9 +15,9 @@
         {% if perms.shiftbooker.can_view_users_shifts %}
             <form action="{% url 'sign_up_for_shift' shift.id %}" method="post">
                 {% csrf_token %}
-                <div class="form-group">
+                <div class="form-group text-center">
                     <label for="user_select">Select a user:</label>
-                    <select class="form-control" id="user_select" name="selected_user">
+                    <select class="form-control w-25 mx-auto m-3" id="user_select" name="selected_user">
                         {% for user in user_list %}
                             <option value="{{ user.id }}">{{ user.username }}</option>
                         {% endfor %}

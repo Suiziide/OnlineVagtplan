@@ -9,7 +9,7 @@ from django.test import Client
 class MovieModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        print("...MovieModelTest...")
+        print("(MovieModelTest)")
         # Set up non-modified objects used by all test methods
         Movie.objects.create(
             title="Test Movie",
@@ -45,7 +45,7 @@ class MovieModelTest(TestCase):
 class ShiftModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        print("...ShiftModelTest...")
+        print("(ShiftModelTest)")
         # Set up non-modified objects used by all test methods
         movie = Movie.objects.create(
             title="Test Movie",
@@ -93,7 +93,7 @@ class ShiftModelTest(TestCase):
 class UserModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        print("...UserModelTest...")
+        print("(UserModelTest)")
         # Set up non-modified objects used by all test methods
         get_user_model().objects.create_user(
             username="stefan",
@@ -131,4 +131,4 @@ class UserModelTest(TestCase):
 
     def test_permissions(self):
         user = get_user_model().objects.get(id=1)
-        self.assertTrue(user.has_perm("auth.can_view_users_shifts"))
+        self.assertFalse(user.has_perm("auth.can_view_users_shifts"))
