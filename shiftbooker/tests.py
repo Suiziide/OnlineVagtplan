@@ -112,8 +112,6 @@ class UserModelTest(TestCase):
         )
 
     def test_get_by_natural_key(self):
-        # user_manager = CustomUserManager()
-        # user = user_manager.get_by_natural_key(username="testbrugernavn")
         user = get_user_model().objects.get_by_natural_key(username="testbrugernavn")
         self.assertIsNotNone(user)
         self.assertEqual(user.username, "testbrugernavn")
