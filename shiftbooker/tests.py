@@ -3,12 +3,9 @@ from django.urls import reverse
 from .models import Shift, Movie
 from django.contrib.auth import get_user_model
 
-
-# Create your tests here.
 class MovieModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        print("(MovieModelTest)")
         # Set up non-modified objects used by all test methods
         Movie.objects.create(
             title="Test Movie", date="2024-01-01T12:00:00Z", duration=120, poster=None
@@ -43,23 +40,21 @@ class MovieModelTest(TestCase):
         movie = Movie.objects.get(id=1)
         self.assertEqual(str(movie), movie.title)
 
-
 class ShiftModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        print("(ShiftModelTest)")
         # Set up non-modified objects used by all test methods
         movie = Movie.objects.create(
             title="Test Movie",
-            date="2023-01-01T12:00:00Z",  # Replace with a valid date and time
+            date="2023-01-01T12:00:00Z",
             duration=120,
         )
         Shift.objects.create(
             shift_type="m",
-            date="2023-01-02T12:00:00Z",  # Replace with a valid date and time
+            date="2023-01-02T12:00:00Z",
             duration=60,
             movie=movie,
-            user=None,  # Assuming this is a nullable field
+            user=None,
         )
 
     def test_get_absolute_url(self):
@@ -96,11 +91,9 @@ class ShiftModelTest(TestCase):
         shift = Shift.objects.get(id=1)
         self.assertIsNone(shift.user)
 
-
 class UserModelTest(TestCase):
     @classmethod
     def setUpTestData(cls):
-        print("(UserModelTest)")
         # Set up non-modified objects used by all test methods
         get_user_model().objects.create_user(
             username="testbrugernavn",
