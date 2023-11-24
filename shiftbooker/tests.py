@@ -1,4 +1,5 @@
 from django.test import TestCase
+from django.urls import reverse
 from .models import Shift, Movie
 from django.contrib.auth import get_user_model
 
@@ -12,6 +13,11 @@ class MovieModelTest(TestCase):
         Movie.objects.create(
             title="Test Movie", date="2024-01-01T12:00:00Z", duration=120, poster=None
         )
+
+    def test_get_absolute_url(self):
+        movie = Movie.objects.get(id=1)
+        expected_url = reverse("movie-detail", args=[str(movie.id)])
+        self.assertEqual(movie.get_absolute_url(), expected_url)
 
     def test_title_label(self):
         movie = Movie.objects.get(id=1)
@@ -56,6 +62,11 @@ class ShiftModelTest(TestCase):
             user=None,  # Assuming this is a nullable field
         )
 
+    def test_get_absolute_url(self):
+        shift = Shift.objects.get(id=1)
+        expected_url = reverse("shift-detail", args=[str(shift.id)])
+        self.assertEqual(shift.get_absolute_url(), expected_url)
+
     def test_shift_type_label(self):
         shift = Shift.objects.get(id=1)
         field_label = shift._meta.get_field("shift_type").verbose_name
@@ -99,6 +110,18 @@ class UserModelTest(TestCase):
             phone="88888888",
             shifts_taken=69,
         )
+
+    def test_get_by_natural_key(self):
+        # user_manager = CustomUserManager()
+        # user = user_manager.get_by_natural_key(username="testbrugernavn")
+        user = get_user_model().objects.get_by_natural_key(username="testbrugernavn")
+        self.assertIsNotNone(user)
+        self.assertEqual(user.username, "testbrugernavn")
+
+    def test_get_absolute_url(self):
+        user = get_user_model().objects.get(id=1)
+        expected_url = reverse("volunteer-detail", args=[str(user.id)])
+        self.assertEqual(user.get_absolute_url(), expected_url)
 
     def test_username_label(self):
         user = get_user_model().objects.get(id=1)
