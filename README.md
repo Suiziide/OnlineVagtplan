@@ -14,6 +14,8 @@ runs on localhost:8000
 
 login with user testuser:testuser or with superuser:superuser
 
+To see the test coverage report, open coverage_report/index.html
+
 ```
 /*
  * ----------------------------------------------------------------------------
