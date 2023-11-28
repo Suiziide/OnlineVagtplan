@@ -34,7 +34,6 @@ class CreateUserForm(ModelForm):
         ]
         widgets = {
             "password": PasswordInput(),
-            # "email": EmailInput()
         }
 
 

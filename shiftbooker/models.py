@@ -4,10 +4,6 @@ from django.conf import settings
 from django.contrib.auth.models import AbstractUser, UserManager
 
 
-## Users skal lige undersøges hvordan vi tilføjer fields til standard modellen!! Det har vi gjort.
-## https://docs.djangoproject.com/en/4.2/topics/auth/customizing/#auth-custom-user ?
-
-
 class CustomUserManager(UserManager):
     def get_by_natural_key(self, username):
         return self.get(username__iexact=username)
@@ -77,9 +73,6 @@ class Shift(models.Model):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True, blank=True
     )
-    # user = models.ForeignKey(
-    #    "Volunteer", on_delete=models.SET_NULL, null=True, blank=True
-    # )
 
     # Metadata
     class Meta:
@@ -93,16 +86,3 @@ class Shift(models.Model):
     def __str__(self):
         """String for representing the MyModelName object (in Admin site etc.)."""
         return f"{self.movie.title}, {self.date}"
-
-
-# class Volunteer(models.Model):
-#     user = models.OneToOneField(User, on_delete=models.CASCADE)
-#     registered = models.DateField(
-#         ("Registration Date"), auto_now=False, auto_now_add=True
-#     )
-#     phone = models.CharField(max_length=100)
-#     shifts_taken = models.IntegerField("Number of shifts taken", default=0)
-
-#     def __str__(self):
-#         """String for representing the MyModelName object (in Admin site etc.)."""
-#         return self.user.username
