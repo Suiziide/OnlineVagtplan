@@ -14,7 +14,7 @@ runs on localhost:8000
 
 login with user testuser:testuser or with superuser:superuser
 
-
+```
 /*
  * ----------------------------------------------------------------------------
  * "THE BEER-WARE LICENSE" (Revision 42):
@@ -23,3 +23,4 @@ login with user testuser:testuser or with superuser:superuser
  * you can buy me a beer in return.
  * ----------------------------------------------------------------------------
  */
+```
